@@ -55,23 +55,9 @@ namespace StorageMemory.BuildingBookcase
             var comp = parent as Building_Bookcase;
             if (comp == null) return;
 
-            foreach (var gp in _cachedBooks)
+            foreach (var gp in _cachedBooks.Where(gp => gp != null && !gp.Destroyed))
             {
-                if (gp == null || gp.Destroyed) continue;
-
-                if (!comp.SearchableContents.TryAdd(gp))
-                {
-#if DEBUG
-                    Log.Warning($"[StorageMemory] Could not reinsert book {gp.LabelCap}, placing on ground.");
-#endif
-                    GenPlace.TryPlaceThing(gp, parent.Position, parent.Map, ThingPlaceMode.Near);
-                }
-                else
-                {
-#if DEBUG
-                    Log.Message($"[StorageMemory] Successfully reinserted book: {gp.LabelCap}");
-#endif
-                }
+                StorageMemoryManager.Instance.Enqueue(gp, comp.SearchableContents, parent.Position, parent.Map);
             }
             
             _cachedBooks.Clear();

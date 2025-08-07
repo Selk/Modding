@@ -90,12 +90,9 @@ namespace StorageMemory.BuildingStorage
             {
                 var helder = containerComp.GetDirectlyHeldThings();
 
-                foreach (var thing in _cachedThings.Where(t => t != null && !t.Destroyed && !helder.TryAdd(t)))
+                foreach (var thing in _cachedThings.Where(thing => thing != null && !thing.Destroyed))
                 {
-#if DEBUG
-                    Log.Message($"[StorageMemory] Reinserted {thing.LabelCap} item.");
-#endif
-                    GenPlace.TryPlaceThing(thing, parent.Position, parent.Map, ThingPlaceMode.Near);
+                    StorageMemoryManager.Instance.Enqueue(thing, helder, parent.Position, parent.Map);
                 }
             }
             else
@@ -105,10 +102,7 @@ namespace StorageMemory.BuildingStorage
 #endif
                 foreach (var thing in _cachedThings.Where(t => t != null && !t.Destroyed))
                 {
-#if DEBUG
-                    Log.Message($"[StorageMemory] Reinserted {thing.LabelCap} item.");
-#endif
-                    GenPlace.TryPlaceThing(thing, parent.Position, parent.Map, ThingPlaceMode.Near);
+                    StorageMemoryManager.Instance.Enqueue(thing, null, parent.Position, parent.Map);
                 }
             }
 

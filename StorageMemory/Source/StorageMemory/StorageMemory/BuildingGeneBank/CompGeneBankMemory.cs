@@ -56,23 +56,9 @@ namespace StorageMemory.BuildingGeneBank
             var comp = parent.TryGetComp<CompGenepackContainer>();
             if (comp == null) return;
 
-            foreach (var gp in _cachedGenepacks)
+            foreach (var gp in _cachedGenepacks.Where(gp => gp != null && !gp.Destroyed))
             {
-                if (gp == null || gp.Destroyed) continue;
-
-                if (!comp.innerContainer.TryAdd(gp))
-                {
-#if DEBUG
-                    Log.Warning($"[StorageMemory] Could not reinsert GenePack {gp.LabelCap}, placing on ground.");
-#endif
-                    GenPlace.TryPlaceThing(gp, parent.Position, parent.Map, ThingPlaceMode.Near);
-                }
-                else
-                {
-#if DEBUG
-                    Log.Message($"[StorageMemory] Successfully reinserted GenePack: {gp.LabelCap}");
-#endif
-                }
+                StorageMemoryManager.Instance.Enqueue(gp, comp.innerContainer, parent.Position, parent.Map);
             }
             
             _cachedGenepacks.Clear();

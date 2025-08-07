@@ -16,6 +16,14 @@ namespace StorageMemory
         {
             var harmony = new Harmony("Karshou.StorageMemory");
             harmony.PatchAll();
+            
+            LongEventHandler.QueueLongEvent(() =>
+            {
+                if (Current.Game.GetComponent<StorageMemoryManager>() == null)
+                {
+                    Current.Game.components.Add(new StorageMemoryManager(Current.Game));
+                }
+            }, "InitStorageMemory", false, null);
 
             AddMemoryCompToStorageBuildings();
         }
