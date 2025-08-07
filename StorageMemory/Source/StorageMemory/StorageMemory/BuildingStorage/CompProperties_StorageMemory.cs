@@ -1,6 +1,6 @@
 ﻿using Verse;
 
-namespace StorageMemory
+namespace StorageMemory.BuildingStorage
 {
     public class CompProperties_StorageMemory : CompProperties
     {

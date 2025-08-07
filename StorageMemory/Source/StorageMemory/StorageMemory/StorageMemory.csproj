@@ -54,4 +54,9 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="BuildingBookcase\" />
+      <Folder Include="BuildingGeneBank\" />
+    </ItemGroup>
+
 </Project>
